@@ -217,7 +217,7 @@
   </style>
 </head>
 <body>
-  <!-- print effects: "ink" roughens edges, "bleed" rounds big type and spreads it as halftone dots -->
+  <!-- print effects: "ink" roughens edges, "bleed" rounds big type and lets the ink spread softly -->
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
     <filter id="ink" x="-2%" y="-2%" width="104%" height="104%">
       <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="4" result="noise"/>
@@ -226,30 +226,17 @@
     <filter id="bleed" x="-8%" y="-15%" width="116%" height="130%">
       <feGaussianBlur in="SourceGraphic" stdDeviation="1.6" result="soft"/>
       <feColorMatrix in="soft" type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 14 -6" result="round"/>
-      <feTurbulence type="fractalNoise" baseFrequency="0.7" numOctaves="2" seed="9" result="noise"/>
-      <feDisplacementMap in="round" in2="noise" scale="2" xChannelSelector="R" yChannelSelector="G" result="inked"/>
-      <!-- ink spreading past the letters as a halo of halftone dots -->
-      <feGaussianBlur in="SourceGraphic" stdDeviation="11" result="halo"/>
-      <feImage href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='6' height='6'><defs><radialGradient id='d'><stop offset='0' stop-color='white'/><stop offset='1' stop-color='white' stop-opacity='0'/></radialGradient></defs><rect width='6' height='6' fill='url(%23d)'/></svg>" width="6" height="6" result="dot"/>
-      <feTile in="dot" result="dots"/>
-      <feComposite in="halo" in2="dots" operator="arithmetic" k2="1.6" k3="0.8" k4="-1" result="screened"/>
-      <feComponentTransfer in="screened" result="haloMask"><feFuncA type="linear" slope="30" intercept="0"/></feComponentTransfer>
-      <feComponentTransfer in="halo" result="haloColour"><feFuncA type="linear" slope="0" intercept="1"/></feComponentTransfer>
-      <feComposite in="haloColour" in2="haloMask" operator="in" result="haloHard"/>
-      <feGaussianBlur in="haloHard" stdDeviation="0.5" result="haloDots"/>
-      <feMerge><feMergeNode in="haloDots"/><feMergeNode in="inked"/></feMerge>
+      <!-- ink spreading softly past the letter edges -->
+      <feGaussianBlur in="SourceGraphic" stdDeviation="6" result="halo"/>
+      <feComponentTransfer in="halo" result="haloSoft"><feFuncA type="linear" slope="1.5"/></feComponentTransfer>
+      <feMerge><feMergeNode in="haloSoft"/><feMergeNode in="round"/></feMerge>
     </filter>
     <filter id="bleed-sm" x="-8%" y="-15%" width="116%" height="130%">
       <feGaussianBlur in="SourceGraphic" stdDeviation="0.8" result="soft"/>
       <feColorMatrix in="soft" type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 12 -5" result="round"/>
-      <feGaussianBlur in="SourceGraphic" stdDeviation="3.5" result="halo"/>
-      <feImage href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='3.5' height='3.5'><defs><radialGradient id='d'><stop offset='0' stop-color='white'/><stop offset='1' stop-color='white' stop-opacity='0'/></radialGradient></defs><rect width='3.5' height='3.5' fill='url(%23d)'/></svg>" width="3.5" height="3.5" result="dot"/>
-      <feTile in="dot" result="dots"/>
-      <feComposite in="halo" in2="dots" operator="arithmetic" k2="1.15" k3="0.85" k4="-1" result="screened"/>
-      <feComponentTransfer in="screened" result="haloMask"><feFuncA type="linear" slope="30" intercept="0"/></feComponentTransfer>
-      <feComponentTransfer in="halo" result="haloColour"><feFuncA type="linear" slope="0" intercept="1"/></feComponentTransfer>
-      <feComposite in="haloColour" in2="haloMask" operator="in" result="haloDots"/>
-      <feMerge><feMergeNode in="haloDots"/><feMergeNode in="round"/></feMerge>
+      <feGaussianBlur in="SourceGraphic" stdDeviation="2.5" result="halo"/>
+      <feComponentTransfer in="halo" result="haloSoft"><feFuncA type="linear" slope="1.4"/></feComponentTransfer>
+      <feMerge><feMergeNode in="haloSoft"/><feMergeNode in="round"/></feMerge>
     </filter>
   </svg>
 
