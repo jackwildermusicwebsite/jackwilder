@@ -3,6 +3,156 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>jack wilder.</title>
+  <meta name="description" content="jack wilder — ideas i had in my freshman year of college.">
+  <meta property="og:title" content="jack wilder.">
+  <meta property="og:description" content="ideas i had in my freshman year of college.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,400..800&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --black: #000000;   /* page background */
+      --white: #ffffff;   /* main text */
+      --grey: #9a9a9a;    /* secondary text */
+      --purple: #633980;  /* "wilder" in the heading */
+      --line: rgba(255, 255, 255, 0.25);
+      --gutter: clamp(16px, 4vw, 48px);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--black);
+      color: var(--white);
+      font: 400 1.0625rem/1.6 "Instrument Sans", system-ui, sans-serif;
+      text-transform: lowercase;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; text-underline-offset: 0.2em; text-decoration-thickness: 1px; }
+    a:hover { color: var(--grey); }
+    :focus-visible { outline: 2px solid var(--white); outline-offset: 3px; }
+
+    /* Top bar */
+    .bar {
+      display: flex; justify-content: space-between; align-items: center; gap: 1rem;
+      padding: 18px var(--gutter);
+      font-weight: 500;
+    }
+    .bar nav { display: flex; gap: clamp(14px, 3vw, 32px); }
+    .bar nav a, .bar .home { text-decoration: none; }
+    .bar .home { font-weight: 600; }
+
+    /* Hero */
+    .hero { padding: clamp(40px, 10vh, 120px) var(--gutter) clamp(32px, 6vh, 64px); }
+    .name {
+      margin: 0;
+      font-family: "Bricolage Grotesque", sans-serif;
+      font-variation-settings: "wdth" 75;
+      font-weight: 800;
+      font-size: clamp(4.5rem, 19vw, 17rem);
+      line-height: 0.85;
+      letter-spacing: -0.02em;
+    }
+    .name > span { display: block; }
+    .name .wilder { color: var(--purple); }
+    .name .dot { color: var(--white); }
+    .intro {
+      max-width: 34ch;
+      margin: clamp(24px, 4vh, 40px) 0 0;
+      font-size: clamp(1.15rem, 2vw, 1.4rem);
+      line-height: 1.45;
+    }
+
+    /* Sections */
+    section { padding: clamp(48px, 9vh, 96px) var(--gutter); border-top: 1px solid var(--line); }
+    h2 {
+      margin: 0 0 28px;
+      font-family: "Bricolage Grotesque", sans-serif;
+      font-variation-settings: "wdth" 85;
+      font-weight: 700;
+      font-size: clamp(2rem, 5vw, 3.25rem);
+      line-height: 1;
+    }
+    .wrap { max-width: 1100px; }
+
+    /* Ideas: dated list, in order */
+    .ideas { list-style: none; margin: 0; padding: 0; max-width: 720px; }
+    .ideas li {
+      display: grid; grid-template-columns: 6rem 1fr; gap: 16px; align-items: baseline;
+      padding: 18px 0; border-bottom: 1px solid var(--line);
+    }
+    .ideas time { color: var(--grey); font-variant-numeric: tabular-nums; }
+    .ideas .title { font-size: clamp(1.2rem, 2.4vw, 1.5rem); font-weight: 500; }
+
+    /* Contact */
+    .contact a.email {
+      font-family: "Bricolage Grotesque", sans-serif;
+      font-variation-settings: "wdth" 80;
+      font-weight: 700;
+      font-size: clamp(1.6rem, 6vw, 4rem);
+      line-height: 1.1;
+      word-break: break-word;
+    }
+
+    footer { padding: 28px var(--gutter); border-top: 1px solid var(--line); color: var(--grey); font-size: 0.9rem; }
+
+    @media (prefers-reduced-motion: no-preference) {
+      .name > span { animation: settle 0.9s cubic-bezier(.2,.7,.2,1) both; }
+      .name > span:last-child { animation-delay: 0.12s; }
+      @keyframes settle { from { opacity: 0; transform: translateY(0.25em); } to { opacity: 1; transform: none; } }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="bar">
+    <a class="home" href="#top">jack-wilder.com</a>
+    <nav aria-label="Sections">
+      <a href="#ideas">ideas</a>
+      <a href="#contact">contact</a>
+    </nav>
+  </header>
+
+  <main id="top">
+    <div class="hero">
+      <h1 class="name"><span>jack</span><span class="wilder">wilder<span class="dot">.</span></span></h1>
+      <p class="intro">ideas i had in my freshman year of college.</p>
+    </div>
+
+    <section id="ideas">
+      <div class="wrap">
+        <h2>ideas</h2>
+        <!-- EDIT: one <li> per idea, in date order -->
+        <ol class="ideas">
+          <li><time>nov 30</time><span class="title">flesh and bones v16</span></li>
+          <li><time>dec 21</time><span class="title">so sweet v12</span></li>
+          <li><time>feb 1</time><span class="title">said v6</span></li>
+          <li><time>mar 1</time><span class="title">parallel v9</span></li>
+          <li><time>apr 12</time><span class="title">apollo v2</span></li>
+          <li><time>apr 26</time><span class="title">comes and goes v8</span></li>
+          <li><time>may 31</time><span class="title">family dinner</span></li>
+        </ol>
+      </div>
+    </section>
+
+    <section id="contact" class="contact">
+      <div class="wrap">
+        <h2>contact</h2>
+        <a class="email" href="mailto:jackwildermakesmusic@gmail.com">jackwildermakesmusic@gmail.com</a>
+      </div>
+    </section>
+  </main>
+
+  <footer>© <span id="yr">2026</span> jack wilder</footer>
+  <script>document.getElementById('yr').textContent = new Date().getFullYear();</script>
+</body>
+</html>
+<!doctype html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Jack Wilder</title>
   <meta name="description" content="Jack Wilder — ideas I had in my freshman year of college.">
   <meta property="og:title" content="Jack Wilder">
