@@ -56,7 +56,6 @@
     }
     .name > span { display: block; }
     .name .wilder { color: var(--purple); }
-    .name .dot { color: var(--white); }
     .intro {
       max-width: 34ch;
       margin: clamp(24px, 4vh, 40px) 0 0;
@@ -84,6 +83,7 @@
     }
     .ideas time { color: var(--grey); font-variant-numeric: tabular-nums; }
     .ideas .title { font-size: clamp(1.2rem, 2.4vw, 1.5rem); font-weight: 500; }
+    .ideas .caps { text-transform: none; }
 
     /* Contact */
     .contact a.email {
@@ -116,7 +116,7 @@
 
   <main id="top">
     <div class="hero">
-      <h1 class="name"><span>jack</span><span class="wilder">wilder<span class="dot">.</span></span></h1>
+      <h1 class="name"><span>jack</span><span class="wilder">wilder.</span></h1>
       <p class="intro">ideas i had in my freshman year of college.</p>
     </div>
 
@@ -125,13 +125,13 @@
         <h2>ideas</h2>
         <!-- EDIT: one <li> per idea, in date order -->
         <ol class="ideas">
-          <li><time>nov 30</time><span class="title">flesh and bones v16</span></li>
-          <li><time>dec 21</time><span class="title">so sweet v12</span></li>
-          <li><time>feb 1</time><span class="title">said v6</span></li>
-          <li><time>mar 1</time><span class="title">parallel v9</span></li>
-          <li><time>apr 12</time><span class="title">apollo v2</span></li>
-          <li><time>apr 26</time><span class="title">comes and goes v8</span></li>
-          <li><time>may 31</time><span class="title">family dinner</span></li>
+          <li><time>nov 30</time><span class="title">flesh and bones v16.</span></li>
+          <li><time>dec 21</time><span class="title">so sweet v12.</span></li>
+          <li><time>feb 1</time><span class="title">said v6.</span></li>
+          <li><time>mar 1</time><span class="title">parallel v9.</span></li>
+          <li><time>apr 12</time><span class="title">apollo v2.</span></li>
+          <li><time>apr 26</time><span class="title">comes and goes v8.</span></li>
+          <li><time>may 31</time><span class="title">family dinner <span class="caps">EP</span>.</span></li>
         </ol>
       </div>
     </section>
