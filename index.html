@@ -21,7 +21,7 @@
       --font: "Helvetica Neue", Helvetica, Inter, Arial, sans-serif;
       --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
       /* width of the landing poster column */
-      --W: min(86vw, calc((100svh - 110px) / 1.9));
+      --W: min(86vw, calc((100svh - 110px) / 1.42));
     }
     * { box-sizing: border-box; }
     html { scroll-behavior: smooth; }
@@ -69,13 +69,13 @@
     .poster { width: var(--W); display: flex; flex-direction: column; align-items: stretch; }
     .word { text-align: center; }
     .word { display: block; will-change: transform; }
-    .word span {
+    .word > span {
       display: inline-block; white-space: nowrap;
       font-weight: 900; line-height: 0.78; letter-spacing: -0.045em;
       filter: url(#bleed);
     }
-    .word.top span { margin-bottom: 0.2em; }
-    .word.bottom span { margin-top: calc(var(--W) * 0.05); color: var(--purple); }
+    .word.top > span { margin-bottom: 0.14em; }
+    .word .w { color: var(--purple); }
     .word { width: 100vw; margin-left: calc((100vw - var(--W)) / -2); }
     .grid {
       display: grid; grid-template-columns: repeat(3, 1fr);
@@ -125,11 +125,11 @@
     .big .w { color: var(--purple); }
 
     .strip {
-      display: block; white-space: nowrap;
+      display: block; white-space: nowrap; text-align: center;
       margin: clamp(14px, 2vw, 22px) calc(var(--gutter) * -1) 0;
       padding: 6px var(--gutter);
       background: #d9d9d9; color: #111;
-      transform: rotate(-0.7deg); transform-origin: left;
+      transform: rotate(-0.7deg); transform-origin: center;
       font-size: clamp(0.85rem, 1.6vw, 1.25rem); font-weight: 500;
       filter: url(#ink);
     }
@@ -160,14 +160,6 @@
     }
     .video:hover .tri { background: var(--white); }
     .video:hover .tri::after { border-left-color: var(--black); }
-    .tags { position: absolute; right: var(--gutter); top: clamp(18px, 4vw, 48px); display: flex; flex-direction: column; align-items: flex-end; gap: 8px; }
-    .tags span {
-      background: #eaeaea; color: #111; border-radius: 4px; padding: 5px 10px 6px;
-      font: 500 clamp(0.7rem, 1.1vw, 0.9rem)/1.15 var(--mono); text-align: center;
-      box-shadow: 0 2px 0 rgba(0,0,0,0.4);
-    }
-    .tags span small { display: block; font-size: 0.7em; opacity: 0.7; }
-    .tags span:nth-child(2) { transform: rotate(-1.5deg); margin-right: 18px; }
 
     /* ---------- contact ---------- */
     .contact { padding: clamp(70px, 12vh, 140px) var(--gutter) clamp(50px, 8vh, 90px); }
@@ -214,8 +206,7 @@
       .ideas { font-size: clamp(1rem, 5.4vw, 1.4rem); }
       .ideas li, .ideas .head { grid-template-columns: 2.4em 3.1em 1fr auto; }
       .strip { font-size: 0.75rem; }
-      .tags span { font-size: 0.65rem; }
-      .word span, .big { filter: url(#bleed-sm); }
+      .word > span, .big { filter: url(#bleed-sm); }
       .contact .email { font-size: 5.6vw; }
     }
     @media (prefers-reduced-motion: reduce) {
@@ -226,29 +217,39 @@
   </style>
 </head>
 <body>
-  <!-- print effects: "ink" roughens edges, "bleed" rounds and smears big type -->
+  <!-- print effects: "ink" roughens edges, "bleed" rounds big type and spreads it as halftone dots -->
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
     <filter id="ink" x="-2%" y="-2%" width="104%" height="104%">
       <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="4" result="noise"/>
       <feDisplacementMap in="SourceGraphic" in2="noise" scale="1" xChannelSelector="R" yChannelSelector="G"/>
     </filter>
-    <filter id="bleed" x="-6%" y="-10%" width="112%" height="120%">
+    <filter id="bleed" x="-8%" y="-15%" width="116%" height="130%">
       <feGaussianBlur in="SourceGraphic" stdDeviation="1.6" result="soft"/>
       <feColorMatrix in="soft" type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 14 -6" result="round"/>
       <feTurbulence type="fractalNoise" baseFrequency="0.7" numOctaves="2" seed="9" result="noise"/>
       <feDisplacementMap in="round" in2="noise" scale="2" xChannelSelector="R" yChannelSelector="G" result="inked"/>
-      <feGaussianBlur in="SourceGraphic" stdDeviation="2.5 0" result="smear"/>
-      <feComponentTransfer in="smear" result="smearFaint"><feFuncA type="linear" slope="0.45"/></feComponentTransfer>
-      <feOffset in="smearFaint" dx="4" result="smearShift"/>
-      <feMerge><feMergeNode in="smearShift"/><feMergeNode in="inked"/></feMerge>
+      <!-- ink spreading past the letters as a halo of halftone dots -->
+      <feGaussianBlur in="SourceGraphic" stdDeviation="11" result="halo"/>
+      <feImage href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='6' height='6'><defs><radialGradient id='d'><stop offset='0' stop-color='white'/><stop offset='1' stop-color='white' stop-opacity='0'/></radialGradient></defs><rect width='6' height='6' fill='url(%23d)'/></svg>" width="6" height="6" result="dot"/>
+      <feTile in="dot" result="dots"/>
+      <feComposite in="halo" in2="dots" operator="arithmetic" k2="1.6" k3="0.8" k4="-1" result="screened"/>
+      <feComponentTransfer in="screened" result="haloMask"><feFuncA type="linear" slope="30" intercept="0"/></feComponentTransfer>
+      <feComponentTransfer in="halo" result="haloColour"><feFuncA type="linear" slope="0" intercept="1"/></feComponentTransfer>
+      <feComposite in="haloColour" in2="haloMask" operator="in" result="haloHard"/>
+      <feGaussianBlur in="haloHard" stdDeviation="0.5" result="haloDots"/>
+      <feMerge><feMergeNode in="haloDots"/><feMergeNode in="inked"/></feMerge>
     </filter>
-    <filter id="bleed-sm" x="-6%" y="-10%" width="112%" height="120%">
+    <filter id="bleed-sm" x="-8%" y="-15%" width="116%" height="130%">
       <feGaussianBlur in="SourceGraphic" stdDeviation="0.8" result="soft"/>
       <feColorMatrix in="soft" type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 12 -5" result="round"/>
-      <feGaussianBlur in="SourceGraphic" stdDeviation="1.2 0" result="smear"/>
-      <feComponentTransfer in="smear" result="smearFaint"><feFuncA type="linear" slope="0.4"/></feComponentTransfer>
-      <feOffset in="smearFaint" dx="2" result="smearShift"/>
-      <feMerge><feMergeNode in="smearShift"/><feMergeNode in="round"/></feMerge>
+      <feGaussianBlur in="SourceGraphic" stdDeviation="3.5" result="halo"/>
+      <feImage href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='3.5' height='3.5'><defs><radialGradient id='d'><stop offset='0' stop-color='white'/><stop offset='1' stop-color='white' stop-opacity='0'/></radialGradient></defs><rect width='3.5' height='3.5' fill='url(%23d)'/></svg>" width="3.5" height="3.5" result="dot"/>
+      <feTile in="dot" result="dots"/>
+      <feComposite in="halo" in2="dots" operator="arithmetic" k2="1.15" k3="0.85" k4="-1" result="screened"/>
+      <feComponentTransfer in="screened" result="haloMask"><feFuncA type="linear" slope="30" intercept="0"/></feComponentTransfer>
+      <feComponentTransfer in="halo" result="haloColour"><feFuncA type="linear" slope="0" intercept="1"/></feComponentTransfer>
+      <feComposite in="haloColour" in2="haloMask" operator="in" result="haloDots"/>
+      <feMerge><feMergeNode in="haloDots"/><feMergeNode in="round"/></feMerge>
     </filter>
   </svg>
 
@@ -272,7 +273,7 @@
       <div class="stage-inner">
         <div class="poster">
           <h1 style="margin:0;font-size:inherit">
-            <span class="word top" data-dx="0" data-dy="-1"><span class="fit">jack</span></span>
+            <span class="word top" data-dx="0" data-dy="-1"><span class="fit">jack <span class="w">wilder.</span></span></span>
           </h1>
           <!-- EDIT: point each tile's href at the release when it's out -->
           <div class="grid">
@@ -286,7 +287,6 @@
             <a class="tile soon" href="#ideas" style="--x:65%;--y:70%"><span class="face"><time>tba</time><span class="t">soon.</span></span></a>
             <a class="tile soon" href="#ideas" style="--x:35%;--y:50%"><span class="face"><time>tba</time><span class="t">soon.</span></span></a>
           </div>
-          <span class="word bottom" data-dx="0" data-dy="1" aria-hidden="true"><span class="fit">wilder.</span></span>
         </div>
       </div>
     </div>
@@ -311,8 +311,7 @@
 
       <!-- EDIT: swap this for an embedded video once one is up -->
       <a class="video" href="https://www.youtube.com/@Jackwildermusiic" target="_blank" rel="noopener" aria-label="Watch jack wilder on YouTube">
-        <div class="tags" aria-hidden="true"><span><small>[videos]</small>youtube</span><span><small>[status]</small>coming soon</span></div>
-        <div class="play"><span class="tri"></span><span>watch on youtube.</span></div>
+        <div class="play"><span class="tri"></span></div>
       </a>
     </section>
 
@@ -335,14 +334,12 @@
 
     // Size each .fit word so it spans exactly the width of its container
     function fitAll() {
-      // landing: "jack" fills the grid width, "wilder." matches its size (capped to the screen)
+      // landing: "jack wilder." on one line, wider than the grid but within the screen
       var poster = document.querySelector('.poster');
-      var jack = document.querySelector('.word.top .fit'), wild = document.querySelector('.word.bottom .fit');
-      jack.style.fontSize = wild.style.fontSize = '100px';
-      var size = 100 * poster.clientWidth / jack.getBoundingClientRect().width;
-      var maxWild = 100 * (window.innerWidth * 0.94) / wild.getBoundingClientRect().width;
-      size = Math.min(size, maxWild);
-      jack.style.fontSize = wild.style.fontSize = size + 'px';
+      var line = document.querySelector('.word.top .fit');
+      line.style.fontSize = '100px';
+      var target = Math.min(window.innerWidth * 0.94, poster.clientWidth * 1.9);
+      line.style.fontSize = (100 * target / line.getBoundingClientRect().width) + 'px';
       document.querySelectorAll('.big.fit').forEach(function (el) {
         var box = el.parentElement.closest('.poster, .sheet');
         var width = box.classList.contains('sheet') ? box.clientWidth - 2 * parseFloat(getComputedStyle(box).paddingLeft) : box.clientWidth;
