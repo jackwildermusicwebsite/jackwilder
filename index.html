@@ -72,7 +72,7 @@
     .word > span {
       display: inline-block; white-space: nowrap;
       font-weight: 900; line-height: 0.78; letter-spacing: -0.045em;
-      filter: url(#bleed);
+      filter: url(#bleed-lite);
     }
     .word.top > span { margin-bottom: 0.14em; }
     .word .w { color: var(--purple); }
@@ -170,6 +170,8 @@
       filter: url(#ink);
     }
     .contact .email:hover { color: var(--grey); }
+    .contact .alt { margin: 12px 0 0; font-weight: 500; color: var(--grey); }
+    .contact .alt a:hover { color: var(--white); }
     .contact .elsewhere { display: flex; flex-wrap: wrap; gap: 8px 28px; margin-top: 28px; font-weight: 500; }
     .contact .elsewhere a:hover { color: var(--grey); }
     footer { padding: 20px var(--gutter) 28px; color: var(--grey); font-size: 0.85rem; font-weight: 500; border-top: 1px solid var(--line); }
@@ -206,7 +208,8 @@
       .ideas { font-size: clamp(1rem, 5.4vw, 1.4rem); }
       .ideas li, .ideas .head { grid-template-columns: 2.4em 3.1em 1fr auto; }
       .strip { font-size: 0.75rem; }
-      .word > span, .big { filter: url(#bleed-sm); }
+      .big { filter: url(#bleed-sm); }
+      .word > span { filter: url(#bleed-sm); }
       .contact .email { font-size: 5.6vw; }
     }
     @media (prefers-reduced-motion: reduce) {
@@ -229,6 +232,13 @@
       <!-- ink spreading softly past the letter edges -->
       <feGaussianBlur in="SourceGraphic" stdDeviation="6" result="halo"/>
       <feComponentTransfer in="halo" result="haloSoft"><feFuncA type="linear" slope="1.5"/></feComponentTransfer>
+      <feMerge><feMergeNode in="haloSoft"/><feMergeNode in="round"/></feMerge>
+    </filter>
+    <filter id="bleed-lite" x="-8%" y="-15%" width="116%" height="130%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="1.6" result="soft"/>
+      <feColorMatrix in="soft" type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 14 -6" result="round"/>
+      <feGaussianBlur in="SourceGraphic" stdDeviation="3" result="halo"/>
+      <feComponentTransfer in="halo" result="haloSoft"><feFuncA type="linear" slope="0.8"/></feComponentTransfer>
       <feMerge><feMergeNode in="haloSoft"/><feMergeNode in="round"/></feMerge>
     </filter>
     <filter id="bleed-sm" x="-8%" y="-15%" width="116%" height="130%">
@@ -304,7 +314,8 @@
 
     <section class="contact" id="contact">
       <p class="label">[contact]</p>
-      <a class="email" href="mailto:jackwildermakesmusic@gmail.com">jackwildermakesmusic@gmail.com</a>
+      <a class="email" href="mailto:jackwildermakesmusic@gmail.com?subject=hi%20jack">jackwildermakesmusic@gmail.com</a>
+      <p class="alt"><a href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=jackwildermakesmusic@gmail.com&amp;su=hi%20jack" target="_blank" rel="noopener">or open in gmail.</a></p>
       <div class="elsewhere">
         <a href="https://www.instagram.com/jackwildermusic/" target="_blank" rel="noopener">instagram</a>
         <a href="https://music.apple.com/us/artist/jack-wilder/1815475800" target="_blank" rel="noopener">apple music</a>
