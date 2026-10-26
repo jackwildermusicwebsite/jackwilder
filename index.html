@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Jack Wilder</title>
+  <meta name="description" content="Jack Wilder — DJ and producer based in Bristol. Mixes, upcoming dates and bookings.">
+  <!-- Social share preview: replace share.jpg with a 1200x630 photo you add to the folder -->
+  <meta property="og:title" content="Jack Wilder">
+  <meta property="og:description" content="DJ and producer based in Bristol.">
+  <meta property="og:image" content="https://jack-wilder.com/share.jpg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,400..800&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --cobalt: #1a2a9c;     /* page background */
+      --cobalt-deep: #121d73;
+      --paper: #f2efe6;      /* main text */
+      --sodium: #ff8a1f;     /* Bristol streetlight orange, used sparingly */
+      --haze: #a9b1e6;       /* secondary text */
+      --line: rgba(242, 239, 230, 0.22);
+      --gutter: clamp(16px, 4vw, 48px);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--cobalt);
+      color: var(--paper);
+      font: 400 1.0625rem/1.6 "Instrument Sans", system-ui, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; text-underline-offset: 0.2em; text-decoration-thickness: 1px; }
+    a:hover { color: var(--sodium); }
+    :focus-visible { outline: 2px solid var(--sodium); outline-offset: 3px; }
+
+    /* Top bar */
+    .bar {
+      display: flex; justify-content: space-between; align-items: center; gap: 1rem;
+      padding: 18px var(--gutter);
+      font-weight: 500;
+    }
+    .bar nav { display: flex; gap: clamp(14px, 3vw, 32px); }
+    .bar nav a { text-decoration: none; }
+    .bar .home { text-decoration: none; font-weight: 600; }
+
+    /* Hero: the name, as big as the screen allows */
+    .hero { padding: clamp(40px, 10vh, 120px) var(--gutter) clamp(32px, 6vh, 64px); }
+    .name {
+      margin: 0;
+      font-family: "Bricolage Grotesque", sans-serif;
+      font-variation-settings: "wdth" 75;
+      font-weight: 800;
+      font-size: clamp(4.5rem, 19vw, 17rem);
+      line-height: 0.82;
+      letter-spacing: -0.02em;
+    }
+    .name span { display: block; }
+    .name span:last-child { color: var(--sodium); }
+    .intro {
+      max-width: 34ch;
+      margin: clamp(24px, 4vh, 40px) 0 0;
+      font-size: clamp(1.15rem, 2vw, 1.4rem);
+      line-height: 1.45;
+      color: var(--paper);
+    }
+    .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
+    .btn {
+      display: inline-block; padding: 12px 22px; border-radius: 999px;
+      font-weight: 600; text-decoration: none;
+      background: var(--paper); color: var(--cobalt-deep);
+    }
+    .btn.ghost { background: transparent; color: var(--paper); box-shadow: inset 0 0 0 1.5px var(--paper); }
+    .btn:hover { background: var(--sodium); color: var(--cobalt-deep); box-shadow: none; }
+
+    /* Sections */
+    section { padding: clamp(48px, 9vh, 96px) var(--gutter); border-top: 1px solid var(--line); }
+    h2 {
+      margin: 0 0 28px;
+      font-family: "Bricolage Grotesque", sans-serif;
+      font-variation-settings: "wdth" 85;
+      font-weight: 700;
+      font-size: clamp(2rem, 5vw, 3.25rem);
+      line-height: 1;
+      letter-spacing: -0.01em;
+    }
+    .wrap { max-width: 1100px; }
+
+    /* Mixes */
+    .mixes { display: grid; gap: 20px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr)); }
+    .mixes iframe { width: 100%; border: 0; border-radius: 6px; display: block; }
+
+    /* Dates: a real list in date order */
+    .dates { list-style: none; margin: 0; padding: 0; }
+    .dates li {
+      display: grid; grid-template-columns: 7.5rem 1fr auto; gap: 8px 24px; align-items: baseline;
+      padding: 18px 0; border-bottom: 1px solid var(--line);
+    }
+    .dates time { font-weight: 600; font-variant-numeric: tabular-nums; }
+    .dates .event { font-size: 1.2rem; font-weight: 500; }
+    .dates .venue { display: block; font-size: 1rem; color: var(--haze); }
+    .dates .tix { font-weight: 600; }
+    .dates .none { display: block; color: var(--haze); }
+    @media (max-width: 600px) {
+      .dates li { grid-template-columns: 1fr auto; }
+      .dates time { grid-column: 1 / -1; }
+    }
+
+    /* About */
+    .about { display: grid; gap: clamp(24px, 5vw, 64px); grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); align-items: start; }
+    .about p { margin: 0 0 1em; max-width: 60ch; }
+    .photo {
+      aspect-ratio: 4 / 5; width: 100%; object-fit: cover; border-radius: 6px;
+      background: var(--cobalt-deep);
+    }
+
+    /* Contact */
+    .contact a.email {
+      font-family: "Bricolage Grotesque", sans-serif;
+      font-variation-settings: "wdth" 80;
+      font-weight: 700;
+      font-size: clamp(1.6rem, 6vw, 4rem);
+      line-height: 1.1;
+      word-break: break-word;
+    }
+    .links { display: flex; flex-wrap: wrap; gap: 10px 28px; margin: 28px 0 0; padding: 0; list-style: none; font-weight: 500; }
+
+    footer { padding: 28px var(--gutter); border-top: 1px solid var(--line); color: var(--haze); font-size: 0.9rem; }
+
+    /* One moment of motion: the name settles in on load */
+    @media (prefers-reduced-motion: no-preference) {
+      .name span { animation: settle 0.9s cubic-bezier(.2,.7,.2,1) both; }
+      .name span:last-child { animation-delay: 0.12s; }
+      @keyframes settle { from { opacity: 0; transform: translateY(0.25em); } to { opacity: 1; transform: none; } }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="bar">
+    <a class="home" href="#top">jack-wilder.com</a>
+    <nav aria-label="Sections">
+      <a href="#listen">Listen</a>
+      <a href="#dates">Dates</a>
+      <a href="#about">About</a>
+      <a href="#contact">Book</a>
+    </nav>
+  </header>
+
+  <main id="top">
+    <div class="hero">
+      <h1 class="name"><span>Jack</span><span>Wilder</span></h1>
+      <!-- EDIT: one or two sentences about your sound -->
+      <p class="intro">DJ and producer in Bristol. Resident at On and On.</p>
+      <div class="actions">
+        <a class="btn" href="#listen">Hear a mix</a>
+        <a class="btn ghost" href="#contact">Book Jack</a>
+      </div>
+    </div>
+
+    <section id="listen">
+      <div class="wrap">
+        <h2>Listen</h2>
+        <!-- EDIT: on SoundCloud/Mixcloud, open a mix > Share > Embed, copy the src="..." link and paste it below -->
+        <div class="mixes">
+          <iframe title="Mix one" height="166" loading="lazy" allow="autoplay"
+            src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/PASTE-YOUR-MIX-LINK&color=%23ff8a1f&visual=false"></iframe>
+          <iframe title="Mix two" height="166" loading="lazy" allow="autoplay"
+            src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/PASTE-YOUR-MIX-LINK&color=%23ff8a1f&visual=false"></iframe>
+        </div>
+      </div>
+    </section>
+
+    <section id="dates">
+      <div class="wrap">
+        <h2>Upcoming dates</h2>
+        <!-- EDIT: copy a <li> block per gig, soonest first. Delete old ones after they happen. -->
+        <ol class="dates">
+          <li>
+            <time datetime="2026-11-14">Sat 14 Nov</time>
+            <span class="event">On and On<span class="venue">Venue name, Bristol</span></span>
+            <a class="tix" href="#">Tickets</a>
+          </li>
+          <li>
+            <time datetime="2026-12-05">Sat 5 Dec</time>
+            <span class="event">Event name<span class="venue">Venue name, City</span></span>
+            <a class="tix" href="#">Tickets</a>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <section id="about">
+      <div class="wrap about">
+        <div>
+          <h2>About</h2>
+          <!-- EDIT: your bio -->
+          <p>Write two or three short paragraphs here: where you play, what you play, and anything people should know when booking you.</p>
+          <p>Mention residencies, notable support slots, radio, or releases.</p>
+        </div>
+        <!-- EDIT: add a photo called photo.jpg to the same folder -->
+        <img class="photo" src="photo.jpg" alt="Jack Wilder behind the decks">
+      </div>
+    </section>
+
+    <section id="contact" class="contact">
+      <div class="wrap">
+        <h2>Bookings</h2>
+        <!-- EDIT: your email, in both places -->
+        <a class="email" href="mailto:hello@jack-wilder.com">hello@jack-wilder.com</a>
+        <ul class="links">
+          <li><a href="https://soundcloud.com/">SoundCloud</a></li>
+          <li><a href="https://instagram.com/">Instagram</a></li>
+          <li><a href="https://www.mixcloud.com/">Mixcloud</a></li>
+          <li><a href="https://ra.co/">Resident Advisor</a></li>
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <footer>© <span id="yr">2026</span> Jack Wilder</footer>
+  <script>document.getElementById('yr').textContent = new Date().getFullYear();</script>
+</body>
+</html>
