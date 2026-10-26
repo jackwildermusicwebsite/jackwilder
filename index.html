@@ -4,21 +4,24 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>jack wilder.</title>
-  <meta name="description" content="jack wilder — ideas i had in my freshman year of college.">
+  <meta name="description" content="jack wilder. ideas i had in my freshman year of college.">
   <meta property="og:title" content="jack wilder.">
   <meta property="og:description" content="ideas i had in my freshman year of college.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800;900&display=swap" rel="stylesheet">
   <style>
     :root {
-      --black: #000000;   /* page background */
-      --white: #ffffff;   /* main text */
-      --grey: #9a9a9a;    /* secondary text */
-      --purple: #633980;  /* "wilder" in the heading */
-      --line: rgba(255, 255, 255, 0.25);
-      --gutter: clamp(16px, 4vw, 48px);
+      --black: #000000;
+      --white: #ffffff;
+      --grey: #9a9a9a;
+      --purple: #633980;
+      --line: rgba(255, 255, 255, 0.35);
+      --gutter: clamp(16px, 3vw, 40px);
       --font: "Helvetica Neue", Helvetica, Inter, Arial, sans-serif;
+      --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+      /* width of the landing poster column */
+      --W: min(88vw, calc((100svh - 110px) / 1.72));
     }
     * { box-sizing: border-box; }
     html { scroll-behavior: smooth; }
@@ -26,126 +29,222 @@
       margin: 0;
       background: var(--black);
       color: var(--white);
-      font: 700 1.0625rem/1.5 var(--font);
+      font: 700 1rem/1.4 var(--font);
       letter-spacing: -0.01em;
       text-transform: lowercase;
       -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
     }
-    a { color: inherit; text-underline-offset: 0.2em; text-decoration-thickness: 1px; }
-    a:hover { color: var(--grey); }
+    a { color: inherit; text-decoration: none; }
     :focus-visible { outline: 2px solid var(--white); outline-offset: 3px; }
 
-    /* Top bar */
+    /* ---------- top bar ---------- */
     .bar {
-      display: flex; justify-content: space-between; align-items: center; gap: 1rem;
-      padding: 18px var(--gutter);
+      position: fixed; top: 0; left: 0; right: 0; z-index: 20;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 16px var(--gutter);
+      background: linear-gradient(rgba(0,0,0,0.85), rgba(0,0,0,0));
     }
-    .bar nav { display: flex; align-items: center; gap: clamp(14px, 3vw, 32px); }
-    .bar nav a { text-decoration: none; }
-    .social { gap: clamp(14px, 2vw, 22px); }
+    .bar nav { display: flex; align-items: center; gap: clamp(14px, 2.5vw, 28px); }
+    .bar nav a:hover { color: var(--grey); }
+    .social { gap: clamp(12px, 2vw, 20px) !important; }
     .social a { display: block; line-height: 0; transition: opacity 0.15s; }
     .social a:hover { opacity: 0.6; }
-    .social img { width: 22px; height: 22px; display: block; }
+    .social img { width: 20px; height: 20px; display: block; }
 
-    /* Hero */
-    .hero { padding: clamp(40px, 10vh, 120px) var(--gutter) clamp(32px, 6vh, 64px); }
-    .name {
-      margin: 0;
-      font-size: clamp(4rem, 17vw, 15rem);
-      line-height: 0.88;
-      letter-spacing: -0.04em;
+    /* ---------- landing: the 3x3 poster ---------- */
+    .stage { position: relative; height: 185svh; }
+    .stage-inner {
+      position: sticky; top: 0; height: 100svh; overflow: hidden;
+      display: flex; align-items: center; justify-content: center;
+      padding-top: 40px;
     }
-    .name > span { display: block; }
-    .name .wilder { color: var(--purple); }
-    .intro {
-      margin: clamp(24px, 4vh, 40px) 0 0;
-      font-size: clamp(1.15rem, 2vw, 1.4rem);
-      line-height: 1.45;
+    .poster { width: var(--W); display: flex; flex-direction: column; align-items: stretch; }
+    .word { display: block; will-change: transform; }
+    .word span {
+      display: block; white-space: nowrap;
+      font-weight: 900; line-height: 0.78; letter-spacing: -0.045em;
+      filter: url(#bleed);
+    }
+    .word.top span { margin-bottom: 0.2em; }
+    .word.bottom span { margin-top: calc(var(--W) * 0.045); color: var(--purple); }
+    .grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: calc(var(--W) * 0.03);
+    }
+    .tile {
+      position: relative; aspect-ratio: 1; display: block; will-change: transform;
+      container-type: inline-size;
+    }
+    .tile .face {
+      position: absolute; inset: 0;
+      border: 1.5px solid var(--white);
+      padding: 7cqw;
+      display: flex; flex-direction: column; justify-content: space-between;
+      background:
+        radial-gradient(circle at var(--x, 50%) var(--y, 50%), rgba(255,255,255,0.22), transparent 62%),
+        radial-gradient(rgba(255,255,255,0.16) 1px, transparent 1.6px) 0 0 / 5px 5px,
+        #0b0b0b;
+      filter: url(#ink);
+      transition: background-color 0.2s;
+    }
+    .tile:hover .face { background-color: #1a1a1a; border-color: var(--purple); }
+    .tile time { font-size: 9cqw; color: var(--grey); font-weight: 500; }
+    .tile .t { font-size: 12.5cqw; line-height: 0.95; letter-spacing: -0.03em; font-weight: 800; }
+    .tile.soon .t { color: var(--grey); }
+    .caps { text-transform: none; }
+
+    /* ---------- ideas: tour-poster sheet ---------- */
+    .sheet { position: relative; padding: clamp(90px, 12vh, 140px) var(--gutter) 0; }
+    .rules { display: grid; grid-template-columns: 1fr 1fr; gap: 6vw; margin-bottom: 8px; }
+    .rules i { display: block; height: 1.5px; background: linear-gradient(90deg, var(--white) 50%, var(--purple) 50%); }
+    .ideas { list-style: none; margin: 0; padding: 0; font-size: clamp(1.15rem, 3.1vw, 2.6rem); }
+    .ideas li, .ideas .head {
+      display: grid;
+      grid-template-columns: 2.6em 3.4em 2.2em 1fr auto;
+      column-gap: 0.4em; align-items: baseline;
+      line-height: 1.02; font-weight: 500; letter-spacing: -0.035em;
+    }
+    .ideas .head { color: var(--grey); margin-bottom: 0.1em; }
+    .ideas .head span { font-size: 0.26em; letter-spacing: 0; }
+    .ideas sup { font-size: 0.3em; vertical-align: 1.6em; margin-left: 0.15em; letter-spacing: 0; }
+    .ideas .ver { text-align: right; }
+    .ideas a:hover { color: var(--purple); }
+    .ideas li { filter: url(#ink); scroll-margin-top: 90px; }
+
+    .big {
+      display: block; margin: clamp(10px, 2vw, 24px) 0 0;
+      white-space: nowrap; font-weight: 900; line-height: 0.8; letter-spacing: -0.05em;
+      filter: url(#bleed);
+    }
+    .big .w { color: var(--purple); }
+
+    .strip {
+      display: flex; justify-content: space-between; align-items: baseline;
+      margin: clamp(14px, 2vw, 22px) calc(var(--gutter) * -1) 0;
+      padding: 6px var(--gutter);
+      background: #d9d9d9; color: #111;
+      transform: rotate(-0.7deg); transform-origin: left;
+      font-size: clamp(0.85rem, 1.6vw, 1.25rem); font-weight: 500;
+      filter: url(#ink);
     }
 
-    /* Sections */
-    section { padding: clamp(48px, 9vh, 96px) var(--gutter); border-top: 1px solid var(--line); }
-    h2 {
-      margin: 0 0 28px;
-      font-size: clamp(2rem, 5vw, 3.25rem);
-      line-height: 1;
-      letter-spacing: -0.03em;
+    /* video block (stands in for the photo) */
+    .video {
+      position: relative; display: block;
+      margin: 0 calc(var(--gutter) * -1);
+      aspect-ratio: 16 / 9; max-height: 92svh; width: calc(100% + var(--gutter) * 2);
+      overflow: hidden;
+      background:
+        radial-gradient(ellipse 40% 55% at 35% 45%, rgba(255,255,255,0.20), transparent 70%),
+        radial-gradient(ellipse 30% 40% at 72% 60%, rgba(255,255,255,0.12), transparent 70%),
+        radial-gradient(rgba(255,255,255,0.20) 1.1px, transparent 1.8px) 0 0 / 6px 6px,
+        #0d0d0d;
     }
-    .wrap { max-width: 1100px; }
-
-    /* Ideas: dated list, in order */
-    .ideas { list-style: none; margin: 0; padding: 0; max-width: 720px; }
-    .ideas li {
-      display: grid; grid-template-columns: 6rem 1fr; gap: 16px; align-items: baseline;
-      padding: 18px 0; border-bottom: 1px solid var(--line);
+    .video .play {
+      position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+      display: flex; flex-direction: column; align-items: center; gap: 14px;
+      font-weight: 500; font-size: clamp(0.9rem, 1.4vw, 1.1rem);
     }
-    .ideas time { color: var(--grey); font-variant-numeric: tabular-nums; }
-    .ideas .title { font-size: clamp(1.2rem, 2.4vw, 1.5rem); }
-    .ideas .caps { text-transform: none; }
-
-    /* Contact */
-    .contact a.email {
-      font-size: clamp(1.4rem, 5vw, 3.5rem);
-      letter-spacing: -0.03em;
-      line-height: 1.1;
-      word-break: break-word;
+    .video .tri {
+      width: clamp(56px, 7vw, 84px); aspect-ratio: 1; border: 1.5px solid var(--white); border-radius: 50%;
+      display: grid; place-items: center; transition: background-color 0.2s, border-color 0.2s;
     }
+    .video .tri::after {
+      content: ""; width: 0; height: 0; margin-left: 12%;
+      border-left: 22px solid var(--white); border-top: 13px solid transparent; border-bottom: 13px solid transparent;
+    }
+    .video:hover .tri { background: var(--purple); border-color: var(--purple); }
+    .tags { position: absolute; right: var(--gutter); top: clamp(18px, 4vw, 48px); display: flex; flex-direction: column; align-items: flex-end; gap: 8px; }
+    .tags span {
+      background: #eaeaea; color: #111; border-radius: 4px; padding: 5px 10px 6px;
+      font: 500 clamp(0.7rem, 1.1vw, 0.9rem)/1.15 var(--mono); text-align: center;
+      box-shadow: 0 2px 0 rgba(0,0,0,0.4);
+    }
+    .tags span small { display: block; font-size: 0.7em; opacity: 0.7; }
+    .tags span:nth-child(2) { transform: rotate(-1.5deg); margin-right: 18px; }
 
-    footer { padding: 28px var(--gutter); border-top: 1px solid var(--line); color: var(--grey); font-size: 0.9rem; }
+    /* ---------- contact ---------- */
+    .contact { padding: clamp(70px, 12vh, 140px) var(--gutter) clamp(50px, 8vh, 90px); }
+    .contact .label { color: var(--grey); font-weight: 500; margin: 0 0 10px; }
+    .contact .email {
+      display: inline-block; font-weight: 800; letter-spacing: -0.04em; line-height: 1;
+      font-size: min(5.2vw, 5rem); white-space: nowrap;
+      filter: url(#ink);
+    }
+    .contact .email:hover { color: var(--purple); }
+    .contact .elsewhere { display: flex; flex-wrap: wrap; gap: 8px 28px; margin-top: 28px; font-weight: 500; }
+    .contact .elsewhere a:hover { color: var(--grey); }
+    footer { padding: 20px var(--gutter) 28px; color: var(--grey); font-size: 0.85rem; font-weight: 500; border-top: 1px solid var(--line); }
 
-    /* Vintage print feel: uneven ink, paper grain, rough letter edges */
+    /* ---------- print texture: uneven ink, grain ---------- */
     body {
       background:
-        radial-gradient(ellipse 60% 45% at 20% 12%, rgba(255, 255, 255, 0.07), transparent 70%),
-        radial-gradient(ellipse 45% 35% at 78% 30%, rgba(255, 255, 255, 0.05), transparent 70%),
-        radial-gradient(ellipse 55% 40% at 60% 85%, rgba(255, 255, 255, 0.055), transparent 70%),
-        radial-gradient(ellipse 35% 30% at 8% 70%, rgba(255, 255, 255, 0.05), transparent 70%),
+        radial-gradient(ellipse 60% 45% at 20% 12%, rgba(255,255,255,0.07), transparent 70%),
+        radial-gradient(ellipse 45% 35% at 78% 30%, rgba(255,255,255,0.05), transparent 70%),
+        radial-gradient(ellipse 55% 40% at 60% 85%, rgba(255,255,255,0.055), transparent 70%),
+        radial-gradient(ellipse 35% 30% at 8% 70%, rgba(255,255,255,0.05), transparent 70%),
         var(--black);
       background-attachment: fixed;
     }
-    /* Blotchy, uneven ink across the black */
     body::before {
-      content: "";
-      position: fixed; inset: 0;
-      pointer-events: none; z-index: -1;
+      content: ""; position: fixed; inset: 0; pointer-events: none; z-index: -1;
       background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='900' height='900'><filter id='b'><feTurbulence type='fractalNoise' baseFrequency='0.006' numOctaves='4' seed='7'/><feColorMatrix type='saturate' values='0'/></filter><rect width='100%' height='100%' filter='url(%23b)'/></svg>");
-      background-size: cover;
-      opacity: 0.085;
-      mix-blend-mode: screen;
+      background-size: cover; opacity: 0.085; mix-blend-mode: screen;
     }
-    /* Grain on the background */
     html::after {
-      content: "";
-      position: fixed; inset: 0;
-      pointer-events: none; z-index: 9;
+      content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 30;
       background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='g'><feTurbulence type='fractalNoise' baseFrequency='1.1' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='100%' height='100%' filter='url(%23g)'/></svg>");
-      opacity: 0.09;
-      mix-blend-mode: screen;
+      opacity: 0.09; mix-blend-mode: screen;
     }
-    /* Grain in the ink */
     body::after {
-      content: "";
-      position: fixed; inset: 0;
-      pointer-events: none; z-index: 10;
+      content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 31;
       background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
-      opacity: 0.8;
-      mix-blend-mode: multiply;
+      opacity: 0.8; mix-blend-mode: multiply;
     }
-    .bar, main, footer { filter: url(#ink); }
+    .bar nav, .contact .label, .contact .elsewhere, footer { filter: url(#ink); }
 
-    @media (prefers-reduced-motion: no-preference) {
-      .name > span { animation: settle 0.9s cubic-bezier(.2,.7,.2,1) both; }
-      .name > span:last-child { animation-delay: 0.12s; }
-      @keyframes settle { from { opacity: 0; transform: translateY(0.25em); } to { opacity: 1; transform: none; } }
+    /* ---------- small screens ---------- */
+    @media (max-width: 640px) {
+      .ideas { font-size: clamp(1rem, 5.4vw, 1.4rem); }
+      .ideas li, .ideas .head { grid-template-columns: 2.4em 3.1em 1fr auto; }
+      .ideas .no { display: none; }
+      .strip { font-size: 0.75rem; }
+      .tags span { font-size: 0.65rem; }
+      .word span, .big { filter: url(#bleed-sm); }
+      .contact .email { font-size: 5.6vw; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .stage { height: auto; }
+      .stage-inner { position: relative; height: auto; min-height: 100svh; padding: 90px 0 40px; }
     }
   </style>
 </head>
 <body>
-  <!-- Roughens letter edges like screen-printed ink -->
+  <!-- print effects: "ink" roughens edges, "bleed" rounds and smears big type -->
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
     <filter id="ink" x="-2%" y="-2%" width="104%" height="104%">
       <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="4" result="noise"/>
       <feDisplacementMap in="SourceGraphic" in2="noise" scale="1" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <filter id="bleed" x="-6%" y="-10%" width="112%" height="120%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="1.6" result="soft"/>
+      <feColorMatrix in="soft" type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 14 -6" result="round"/>
+      <feTurbulence type="fractalNoise" baseFrequency="0.7" numOctaves="2" seed="9" result="noise"/>
+      <feDisplacementMap in="round" in2="noise" scale="2" xChannelSelector="R" yChannelSelector="G" result="inked"/>
+      <feGaussianBlur in="SourceGraphic" stdDeviation="8 0" result="smear"/>
+      <feComponentTransfer in="smear" result="smearFaint"><feFuncA type="linear" slope="0.3"/></feComponentTransfer>
+      <feOffset in="smearFaint" dx="5" result="smearShift"/>
+      <feMerge><feMergeNode in="smearShift"/><feMergeNode in="inked"/></feMerge>
+    </filter>
+    <filter id="bleed-sm" x="-6%" y="-10%" width="112%" height="120%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="0.8" result="soft"/>
+      <feColorMatrix in="soft" type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 12 -5" result="round"/>
+      <feGaussianBlur in="SourceGraphic" stdDeviation="3 0" result="smear"/>
+      <feComponentTransfer in="smear" result="smearFaint"><feFuncA type="linear" slope="0.25"/></feComponentTransfer>
+      <feOffset in="smearFaint" dx="2" result="smearShift"/>
+      <feMerge><feMergeNode in="smearShift"/><feMergeNode in="round"/></feMerge>
     </filter>
   </svg>
 
@@ -159,40 +258,122 @@
       <a href="https://www.instagram.com/jackwildermusic/" target="_blank" rel="noopener" aria-label="Instagram"><img src="https://cdn.simpleicons.org/instagram/ffffff" alt=""></a>
       <a href="https://music.apple.com/us/artist/jack-wilder/1815475800" target="_blank" rel="noopener" aria-label="Apple Music"><img src="https://cdn.simpleicons.org/applemusic/ffffff" alt=""></a>
       <a href="https://open.spotify.com/artist/2QL2ybIgUnB3XGVp05NqO5" target="_blank" rel="noopener" aria-label="Spotify"><img src="https://cdn.simpleicons.org/spotify/ffffff" alt=""></a>
+      <a href="https://www.youtube.com/@Jackwildermusiic" target="_blank" rel="noopener" aria-label="YouTube"><img src="https://cdn.simpleicons.org/youtube/ffffff" alt=""></a>
     </nav>
   </header>
 
-  <main id="top">
-    <div class="hero">
-      <h1 class="name"><span>jack</span><span class="wilder">wilder.</span></h1>
-      <p class="intro">ideas i had in my freshman year of college.</p>
+  <main>
+    <!-- landing: jack / 3x3 releases / wilder. -->
+    <div class="stage" id="top">
+      <div class="stage-inner">
+        <div class="poster">
+          <h1 style="margin:0;font-size:inherit">
+            <span class="word top" data-dx="0" data-dy="-1"><span class="fit">jack</span></span>
+          </h1>
+          <!-- EDIT: point each tile's href at the release when it's out -->
+          <div class="grid">
+            <a class="tile" href="#idea-1" style="--x:30%;--y:35%"><span class="face"><time>nov 30</time><span class="t">flesh and bones v16.</span></span></a>
+            <a class="tile" href="#idea-2" style="--x:70%;--y:30%"><span class="face"><time>dec 21</time><span class="t">so sweet v12.</span></span></a>
+            <a class="tile" href="#idea-3" style="--x:55%;--y:60%"><span class="face"><time>feb 1</time><span class="t">said v6.</span></span></a>
+            <a class="tile" href="#idea-4" style="--x:25%;--y:65%"><span class="face"><time>mar 1</time><span class="t">parallel v9.</span></span></a>
+            <a class="tile" href="#idea-5" style="--x:50%;--y:45%"><span class="face"><time>apr 12</time><span class="t">apollo v2.</span></span></a>
+            <a class="tile" href="#idea-6" style="--x:75%;--y:55%"><span class="face"><time>apr 26</time><span class="t">comes and goes v8.</span></span></a>
+            <a class="tile" href="#idea-7" style="--x:40%;--y:25%"><span class="face"><time>may 31</time><span class="t">family dinner <span class="caps">EP</span>.</span></span></a>
+            <a class="tile soon" href="#ideas" style="--x:65%;--y:70%"><span class="face"><time>tba</time><span class="t">soon.</span></span></a>
+            <a class="tile soon" href="#ideas" style="--x:35%;--y:50%"><span class="face"><time>tba</time><span class="t">soon.</span></span></a>
+          </div>
+          <span class="word bottom" data-dx="0" data-dy="1" aria-hidden="true"><span class="fit">wilder.</span></span>
+        </div>
+      </div>
     </div>
 
-    <section id="ideas">
-      <div class="wrap">
-        <h2>ideas</h2>
-        <!-- EDIT: one <li> per idea, in date order -->
-        <ol class="ideas">
-          <li><time>nov 30</time><span class="title">flesh and bones v16.</span></li>
-          <li><time>dec 21</time><span class="title">so sweet v12.</span></li>
-          <li><time>feb 1</time><span class="title">said v6.</span></li>
-          <li><time>mar 1</time><span class="title">parallel v9.</span></li>
-          <li><time>apr 12</time><span class="title">apollo v2.</span></li>
-          <li><time>apr 26</time><span class="title">comes and goes v8.</span></li>
-          <li><time>may 31</time><span class="title">family dinner <span class="caps">EP</span>.</span></li>
-        </ol>
-      </div>
+    <!-- ideas: tour-poster sheet -->
+    <section class="sheet" id="ideas">
+      <div class="rules" aria-hidden="true"><i></i><i></i></div>
+      <ol class="ideas">
+        <li class="head" aria-hidden="true"><span>[day]</span><span>[month]</span><span class="no">[no.]</span><span>[idea]</span><span class="ver">[ver]</span></li>
+        <li id="idea-1"><span>30<sup>th</sup></span><span>[nov]</span><span class="no">01</span><span>flesh and bones.</span><span class="ver">v16</span></li>
+        <li id="idea-2"><span>21<sup>st</sup></span><span>[dec]</span><span class="no">02</span><span>so sweet.</span><span class="ver">v12</span></li>
+        <li id="idea-3"><span>1<sup>st</sup></span><span>[feb]</span><span class="no">03</span><span>said.</span><span class="ver">v6</span></li>
+        <li id="idea-4"><span>1<sup>st</sup></span><span>[mar]</span><span class="no">04</span><span>parallel.</span><span class="ver">v9</span></li>
+        <li id="idea-5"><span>12<sup>th</sup></span><span>[apr]</span><span class="no">05</span><span>apollo.</span><span class="ver">v2</span></li>
+        <li id="idea-6"><span>26<sup>th</sup></span><span>[apr]</span><span class="no">06</span><span>comes and goes.</span><span class="ver">v8</span></li>
+        <li id="idea-7"><span>31<sup>st</sup></span><span>[may]</span><span class="no">07</span><span>family dinner.</span><span class="ver caps">EP</span></li>
+      </ol>
+
+      <h2 class="big fit" aria-label="jack wilder.">jack <span class="w">wilder.</span></h2>
+
+      <div class="strip" aria-hidden="true"><span>ideas i had</span><span>in my freshman year</span><span>of college.</span></div>
+
+      <!-- EDIT: swap this for an embedded video once one is up -->
+      <a class="video" href="https://www.youtube.com/@Jackwildermusiic" target="_blank" rel="noopener" aria-label="Watch jack wilder on YouTube">
+        <div class="tags" aria-hidden="true"><span><small>[videos]</small>youtube</span><span><small>[status]</small>coming soon</span></div>
+        <div class="play"><span class="tri"></span><span>watch on youtube.</span></div>
+      </a>
     </section>
 
-    <section id="contact" class="contact">
-      <div class="wrap">
-        <h2>contact</h2>
-        <a class="email" href="mailto:jackwildermakesmusic@gmail.com">jackwildermakesmusic@gmail.com</a>
+    <section class="contact" id="contact">
+      <p class="label">[contact]</p>
+      <a class="email" href="mailto:jackwildermakesmusic@gmail.com">jackwildermakesmusic@gmail.com</a>
+      <div class="elsewhere">
+        <a href="https://www.instagram.com/jackwildermusic/" target="_blank" rel="noopener">instagram</a>
+        <a href="https://music.apple.com/us/artist/jack-wilder/1815475800" target="_blank" rel="noopener">apple music</a>
+        <a href="https://open.spotify.com/artist/2QL2ybIgUnB3XGVp05NqO5" target="_blank" rel="noopener">spotify</a>
+        <a href="https://www.youtube.com/@Jackwildermusiic" target="_blank" rel="noopener">youtube</a>
       </div>
     </section>
   </main>
 
-  <footer>© <span id="yr">2026</span> jack wilder</footer>
-  <script>document.getElementById('yr').textContent = new Date().getFullYear();</script>
+  <footer>© <span id="yr">2026</span> jack wilder.</footer>
+
+  <script>
+    document.getElementById('yr').textContent = new Date().getFullYear();
+
+    // Size each .fit word so it spans exactly the width of its container
+    function fitAll() {
+      document.querySelectorAll('.fit').forEach(function (el) {
+        var box = el.parentElement.closest('.poster, .sheet');
+        var width = box.classList.contains('sheet') ? box.clientWidth - 2 * parseFloat(getComputedStyle(box).paddingLeft) : box.clientWidth;
+        el.style.fontSize = '100px';
+        el.style.display = 'inline-block';
+        var w = el.getBoundingClientRect().width;
+        el.style.display = '';
+        el.style.fontSize = (100 * width / w) + 'px';
+      });
+    }
+
+    // As you scroll, the landing pieces fly off in their own directions
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var stage = document.querySelector('.stage');
+    var tiles = Array.prototype.slice.call(document.querySelectorAll('.tile'));
+    var words = Array.prototype.slice.call(document.querySelectorAll('.word'));
+    var ticking = false;
+    function move() {
+      ticking = false;
+      if (reduce) { return; }
+      var range = stage.offsetHeight - window.innerHeight;
+      var p = Math.min(Math.max(window.scrollY / range, 0), 1);
+      var e = p * p * (3 - 2 * p);
+      tiles.forEach(function (t, i) {
+        var dx = (i % 3) - 1, dy = Math.floor(i / 3) - 1;
+        if (dx === 0 && dy === 0) {
+          t.style.transform = 'scale(' + (1 - e * 0.85) + ')';
+          t.style.opacity = String(1 - e);
+        } else {
+          t.style.transform = 'translate(' + (dx * e * 75) + 'vw,' + (dy * e * 85) + 'vh) rotate(' + (dx * e * 6) + 'deg)';
+        }
+      });
+      words.forEach(function (w) {
+        w.style.transform = 'translateY(' + (Number(w.dataset.dy) * e * 70) + 'vh)';
+      });
+    }
+    function onScroll() { if (!ticking) { ticking = true; requestAnimationFrame(move); } }
+    window.addEventListener('scroll', onScroll, { passive: true });
+
+    fitAll();
+    if (document.fonts && document.fonts.ready) { document.fonts.ready.then(function () { fitAll(); move(); }); }
+    window.addEventListener('resize', function () { fitAll(); move(); });
+    move();
+  </script>
 </body>
 </html>
