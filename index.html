@@ -40,8 +40,12 @@
       display: flex; justify-content: space-between; align-items: center; gap: 1rem;
       padding: 18px var(--gutter);
     }
-    .bar nav { display: flex; gap: clamp(14px, 3vw, 32px); }
-    .bar nav a, .bar .home { text-decoration: none; }
+    .bar nav { display: flex; align-items: center; gap: clamp(14px, 3vw, 32px); }
+    .bar nav a { text-decoration: none; }
+    .social { gap: clamp(14px, 2vw, 22px); }
+    .social a { display: block; line-height: 0; transition: opacity 0.15s; }
+    .social a:hover { opacity: 0.6; }
+    .social img { width: 22px; height: 22px; display: block; }
 
     /* Hero */
     .hero { padding: clamp(40px, 10vh, 120px) var(--gutter) clamp(32px, 6vh, 64px); }
@@ -146,10 +150,15 @@
   </svg>
 
   <header class="bar">
-    <a class="home" href="#top">home</a>
     <nav aria-label="Sections">
+      <a href="#top">home</a>
       <a href="#ideas">ideas</a>
       <a href="#contact">contact</a>
+    </nav>
+    <nav class="social" aria-label="Listen and follow">
+      <a href="https://www.instagram.com/jackwildermusic/" target="_blank" rel="noopener" aria-label="Instagram"><img src="https://cdn.simpleicons.org/instagram/ffffff" alt=""></a>
+      <a href="https://music.apple.com/us/artist/jack-wilder/1815475800" target="_blank" rel="noopener" aria-label="Apple Music"><img src="https://cdn.simpleicons.org/applemusic/ffffff" alt=""></a>
+      <a href="https://open.spotify.com/artist/2QL2ybIgUnB3XGVp05NqO5" target="_blank" rel="noopener" aria-label="Spotify"><img src="https://cdn.simpleicons.org/spotify/ffffff" alt=""></a>
     </nav>
   </header>
 
