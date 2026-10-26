@@ -21,7 +21,7 @@
       --font: "Helvetica Neue", Helvetica, Inter, Arial, sans-serif;
       --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
       /* width of the landing poster column */
-      --W: min(88vw, calc((100svh - 110px) / 1.72));
+      --W: min(86vw, calc((100svh - 110px) / 1.9));
     }
     * { box-sizing: border-box; }
     html { scroll-behavior: smooth; }
@@ -57,17 +57,26 @@
     .stage-inner {
       position: sticky; top: 0; height: 100svh; overflow: hidden;
       display: flex; align-items: center; justify-content: center;
-      padding-top: 40px;
+      padding-top: 40px; isolation: isolate;
+    }
+    .stage-inner::before {
+      content: ""; position: absolute; inset: 0; z-index: -1;
+      background:
+        linear-gradient(rgba(0,0,0,0.35), rgba(0,0,0,0.15) 40%, rgba(0,0,0,0.55)),
+        url("image.png") center 60% / cover no-repeat;
+      filter: grayscale(1) contrast(1.15) brightness(0.62);
     }
     .poster { width: var(--W); display: flex; flex-direction: column; align-items: stretch; }
+    .word { text-align: center; }
     .word { display: block; will-change: transform; }
     .word span {
-      display: block; white-space: nowrap;
+      display: inline-block; white-space: nowrap;
       font-weight: 900; line-height: 0.78; letter-spacing: -0.045em;
       filter: url(#bleed);
     }
     .word.top span { margin-bottom: 0.2em; }
-    .word.bottom span { margin-top: calc(var(--W) * 0.045); color: var(--purple); }
+    .word.bottom span { margin-top: calc(var(--W) * 0.05); color: var(--purple); }
+    .word { width: 100vw; margin-left: calc((100vw - var(--W)) / -2); }
     .grid {
       display: grid; grid-template-columns: repeat(3, 1fr);
       gap: calc(var(--W) * 0.03);
@@ -81,14 +90,11 @@
       border: 1.5px solid var(--white);
       padding: 7cqw;
       display: flex; flex-direction: column; justify-content: space-between;
-      background:
-        radial-gradient(circle at var(--x, 50%) var(--y, 50%), rgba(255,255,255,0.22), transparent 62%),
-        radial-gradient(rgba(255,255,255,0.16) 1px, transparent 1.6px) 0 0 / 5px 5px,
-        #0b0b0b;
+      background: #000;
       filter: url(#ink);
       transition: background-color 0.2s;
     }
-    .tile:hover .face { background-color: #1a1a1a; border-color: var(--purple); }
+    .tile:hover .face { background-color: #1c1c1c; }
     .tile time { font-size: 9cqw; color: var(--grey); font-weight: 500; }
     .tile .t { font-size: 12.5cqw; line-height: 0.95; letter-spacing: -0.03em; font-weight: 800; }
     .tile.soon .t { color: var(--grey); }
@@ -97,11 +103,11 @@
     /* ---------- ideas: tour-poster sheet ---------- */
     .sheet { position: relative; padding: clamp(90px, 12vh, 140px) var(--gutter) 0; }
     .rules { display: grid; grid-template-columns: 1fr 1fr; gap: 6vw; margin-bottom: 8px; }
-    .rules i { display: block; height: 1.5px; background: linear-gradient(90deg, var(--white) 50%, var(--purple) 50%); }
+    .rules i { display: block; height: 1.5px; background: var(--white); }
     .ideas { list-style: none; margin: 0; padding: 0; font-size: clamp(1.15rem, 3.1vw, 2.6rem); }
     .ideas li, .ideas .head {
       display: grid;
-      grid-template-columns: 2.6em 3.4em 2.2em 1fr auto;
+      grid-template-columns: 2.6em 3.4em 1fr auto;
       column-gap: 0.4em; align-items: baseline;
       line-height: 1.02; font-weight: 500; letter-spacing: -0.035em;
     }
@@ -109,7 +115,6 @@
     .ideas .head span { font-size: 0.26em; letter-spacing: 0; }
     .ideas sup { font-size: 0.3em; vertical-align: 1.6em; margin-left: 0.15em; letter-spacing: 0; }
     .ideas .ver { text-align: right; }
-    .ideas a:hover { color: var(--purple); }
     .ideas li { filter: url(#ink); scroll-margin-top: 90px; }
 
     .big {
@@ -120,7 +125,7 @@
     .big .w { color: var(--purple); }
 
     .strip {
-      display: flex; justify-content: space-between; align-items: baseline;
+      display: block; white-space: nowrap;
       margin: clamp(14px, 2vw, 22px) calc(var(--gutter) * -1) 0;
       padding: 6px var(--gutter);
       background: #d9d9d9; color: #111;
@@ -138,8 +143,7 @@
       background:
         radial-gradient(ellipse 40% 55% at 35% 45%, rgba(255,255,255,0.20), transparent 70%),
         radial-gradient(ellipse 30% 40% at 72% 60%, rgba(255,255,255,0.12), transparent 70%),
-        radial-gradient(rgba(255,255,255,0.20) 1.1px, transparent 1.8px) 0 0 / 6px 6px,
-        #0d0d0d;
+        #050505;
     }
     .video .play {
       position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
@@ -154,7 +158,8 @@
       content: ""; width: 0; height: 0; margin-left: 12%;
       border-left: 22px solid var(--white); border-top: 13px solid transparent; border-bottom: 13px solid transparent;
     }
-    .video:hover .tri { background: var(--purple); border-color: var(--purple); }
+    .video:hover .tri { background: var(--white); }
+    .video:hover .tri::after { border-left-color: var(--black); }
     .tags { position: absolute; right: var(--gutter); top: clamp(18px, 4vw, 48px); display: flex; flex-direction: column; align-items: flex-end; gap: 8px; }
     .tags span {
       background: #eaeaea; color: #111; border-radius: 4px; padding: 5px 10px 6px;
@@ -172,7 +177,7 @@
       font-size: min(5.2vw, 5rem); white-space: nowrap;
       filter: url(#ink);
     }
-    .contact .email:hover { color: var(--purple); }
+    .contact .email:hover { color: var(--grey); }
     .contact .elsewhere { display: flex; flex-wrap: wrap; gap: 8px 28px; margin-top: 28px; font-weight: 500; }
     .contact .elsewhere a:hover { color: var(--grey); }
     footer { padding: 20px var(--gutter) 28px; color: var(--grey); font-size: 0.85rem; font-weight: 500; border-top: 1px solid var(--line); }
@@ -208,7 +213,6 @@
     @media (max-width: 640px) {
       .ideas { font-size: clamp(1rem, 5.4vw, 1.4rem); }
       .ideas li, .ideas .head { grid-template-columns: 2.4em 3.1em 1fr auto; }
-      .ideas .no { display: none; }
       .strip { font-size: 0.75rem; }
       .tags span { font-size: 0.65rem; }
       .word span, .big { filter: url(#bleed-sm); }
@@ -233,16 +237,16 @@
       <feColorMatrix in="soft" type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 14 -6" result="round"/>
       <feTurbulence type="fractalNoise" baseFrequency="0.7" numOctaves="2" seed="9" result="noise"/>
       <feDisplacementMap in="round" in2="noise" scale="2" xChannelSelector="R" yChannelSelector="G" result="inked"/>
-      <feGaussianBlur in="SourceGraphic" stdDeviation="8 0" result="smear"/>
-      <feComponentTransfer in="smear" result="smearFaint"><feFuncA type="linear" slope="0.3"/></feComponentTransfer>
-      <feOffset in="smearFaint" dx="5" result="smearShift"/>
+      <feGaussianBlur in="SourceGraphic" stdDeviation="2.5 0" result="smear"/>
+      <feComponentTransfer in="smear" result="smearFaint"><feFuncA type="linear" slope="0.45"/></feComponentTransfer>
+      <feOffset in="smearFaint" dx="4" result="smearShift"/>
       <feMerge><feMergeNode in="smearShift"/><feMergeNode in="inked"/></feMerge>
     </filter>
     <filter id="bleed-sm" x="-6%" y="-10%" width="112%" height="120%">
       <feGaussianBlur in="SourceGraphic" stdDeviation="0.8" result="soft"/>
       <feColorMatrix in="soft" type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 12 -5" result="round"/>
-      <feGaussianBlur in="SourceGraphic" stdDeviation="3 0" result="smear"/>
-      <feComponentTransfer in="smear" result="smearFaint"><feFuncA type="linear" slope="0.25"/></feComponentTransfer>
+      <feGaussianBlur in="SourceGraphic" stdDeviation="1.2 0" result="smear"/>
+      <feComponentTransfer in="smear" result="smearFaint"><feFuncA type="linear" slope="0.4"/></feComponentTransfer>
       <feOffset in="smearFaint" dx="2" result="smearShift"/>
       <feMerge><feMergeNode in="smearShift"/><feMergeNode in="round"/></feMerge>
     </filter>
@@ -291,19 +295,19 @@
     <section class="sheet" id="ideas">
       <div class="rules" aria-hidden="true"><i></i><i></i></div>
       <ol class="ideas">
-        <li class="head" aria-hidden="true"><span>[day]</span><span>[month]</span><span class="no">[no.]</span><span>[idea]</span><span class="ver">[ver]</span></li>
-        <li id="idea-1"><span>30<sup>th</sup></span><span>[nov]</span><span class="no">01</span><span>flesh and bones.</span><span class="ver">v16</span></li>
-        <li id="idea-2"><span>21<sup>st</sup></span><span>[dec]</span><span class="no">02</span><span>so sweet.</span><span class="ver">v12</span></li>
-        <li id="idea-3"><span>1<sup>st</sup></span><span>[feb]</span><span class="no">03</span><span>said.</span><span class="ver">v6</span></li>
-        <li id="idea-4"><span>1<sup>st</sup></span><span>[mar]</span><span class="no">04</span><span>parallel.</span><span class="ver">v9</span></li>
-        <li id="idea-5"><span>12<sup>th</sup></span><span>[apr]</span><span class="no">05</span><span>apollo.</span><span class="ver">v2</span></li>
-        <li id="idea-6"><span>26<sup>th</sup></span><span>[apr]</span><span class="no">06</span><span>comes and goes.</span><span class="ver">v8</span></li>
-        <li id="idea-7"><span>31<sup>st</sup></span><span>[may]</span><span class="no">07</span><span>family dinner.</span><span class="ver caps">EP</span></li>
+        <li class="head" aria-hidden="true"><span>[day]</span><span>[month]</span><span>[idea]</span><span class="ver">[ver]</span></li>
+        <li id="idea-1"><span>30<sup>th</sup></span><span>[nov]</span><span>flesh and bones.</span><span class="ver">v16</span></li>
+        <li id="idea-2"><span>21<sup>st</sup></span><span>[dec]</span><span>so sweet.</span><span class="ver">v12</span></li>
+        <li id="idea-3"><span>1<sup>st</sup></span><span>[feb]</span><span>said.</span><span class="ver">v6</span></li>
+        <li id="idea-4"><span>1<sup>st</sup></span><span>[mar]</span><span>parallel.</span><span class="ver">v9</span></li>
+        <li id="idea-5"><span>12<sup>th</sup></span><span>[apr]</span><span>apollo.</span><span class="ver">v2</span></li>
+        <li id="idea-6"><span>26<sup>th</sup></span><span>[apr]</span><span>comes and goes.</span><span class="ver">v8</span></li>
+        <li id="idea-7"><span>31<sup>st</sup></span><span>[may]</span><span>family dinner.</span><span class="ver caps">EP</span></li>
       </ol>
 
       <h2 class="big fit" aria-label="jack wilder.">jack <span class="w">wilder.</span></h2>
 
-      <div class="strip" aria-hidden="true"><span>ideas i had</span><span>in my freshman year</span><span>of college.</span></div>
+      <div class="strip">ideas i had in my freshman year of college.</div>
 
       <!-- EDIT: swap this for an embedded video once one is up -->
       <a class="video" href="https://www.youtube.com/@Jackwildermusiic" target="_blank" rel="noopener" aria-label="Watch jack wilder on YouTube">
@@ -331,7 +335,15 @@
 
     // Size each .fit word so it spans exactly the width of its container
     function fitAll() {
-      document.querySelectorAll('.fit').forEach(function (el) {
+      // landing: "jack" fills the grid width, "wilder." matches its size (capped to the screen)
+      var poster = document.querySelector('.poster');
+      var jack = document.querySelector('.word.top .fit'), wild = document.querySelector('.word.bottom .fit');
+      jack.style.fontSize = wild.style.fontSize = '100px';
+      var size = 100 * poster.clientWidth / jack.getBoundingClientRect().width;
+      var maxWild = 100 * (window.innerWidth * 0.94) / wild.getBoundingClientRect().width;
+      size = Math.min(size, maxWild);
+      jack.style.fontSize = wild.style.fontSize = size + 'px';
+      document.querySelectorAll('.big.fit').forEach(function (el) {
         var box = el.parentElement.closest('.poster, .sheet');
         var width = box.classList.contains('sheet') ? box.clientWidth - 2 * parseFloat(getComputedStyle(box).paddingLeft) : box.clientWidth;
         el.style.fontSize = '100px';
