@@ -113,7 +113,7 @@
       column-gap: 0.4em; align-items: baseline;
       line-height: 1.02; font-weight: 500; letter-spacing: -0.035em;
     }
-    .ideas .head { color: var(--grey); margin-bottom: 0.1em; }
+    .ideas .head { color: var(--white); margin-bottom: 0.1em; }
     .ideas .head span { font-size: 0.26em; letter-spacing: 0; }
     .ideas sup { font-size: 0.3em; vertical-align: 1.6em; margin-left: 0.15em; letter-spacing: 0; }
     .ideas .ver { text-align: right; }
@@ -252,9 +252,9 @@
 
   <header class="bar">
     <nav aria-label="Sections">
-      <a href="#top">home</a>
-      <a href="#ideas">ideas</a>
-      <a href="#contact">contact</a>
+      <a href="#top">home.</a>
+      <a href="#ideas">ideas.</a>
+      <a href="#contact">contact.</a>
     </nav>
     <nav class="social" aria-label="Listen and follow">
       <a href="https://www.instagram.com/jackwildermusic/" target="_blank" rel="noopener" aria-label="Instagram"><img src="https://cdn.simpleicons.org/instagram/ffffff" alt=""></a>
@@ -328,6 +328,21 @@
 
   <script>
     document.getElementById('yr').textContent = new Date().getFullYear();
+
+    // Email link: opens the visitor's mail app; if none opens, fall back to a new Gmail email
+    document.querySelector('.contact .email').addEventListener('click', function () {
+      var left = false;
+      function gone() { left = true; }
+      window.addEventListener('blur', gone, { once: true });
+      document.addEventListener('visibilitychange', gone, { once: true });
+      setTimeout(function () {
+        window.removeEventListener('blur', gone);
+        document.removeEventListener('visibilitychange', gone);
+        if (!left && document.hasFocus()) {
+          window.open('https://mail.google.com/mail/?view=cm&fs=1&to=jackwildermakesmusic@gmail.com', '_blank', 'noopener');
+        }
+      }, 900);
+    });
 
     // Size each .fit word so it spans exactly the width of its container
     function fitAll() {
